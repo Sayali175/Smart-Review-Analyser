@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartReview AI | Cloud-Based Sentiment Analysis</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- LOGIN PAGE -->
+    <section id="login-view" class="view active">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="logo-wrapper">
+                    <i class="ph ph-brain logo-icon"></i>
+                </div>
+                <h1>SmartReview AI</h1>
+                <p class="tagline">Analyze reviews intelligently using AI</p>
+                
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <div class="input-wrapper">
+                            <i class="ph ph-envelope"></i>
+                            <input type="email" id="email" placeholder="name@company.com" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <i class="ph ph-lock"></i>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login to Dashboard</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN DASHBOARD -->
+    <section id="dashboard-view" class="view">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="ph ph-brain logo-icon-small"></i>
+                <h2>SmartReview AI</h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <button class="nav-btn active" data-target="analyzer-section">
+                            <i class="ph ph-magic-wand"></i>
+                            <span>Analyze Review</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn" data-target="history-section">
+                            <i class="ph ph-clock-counter-clockwise"></i>
+                            <span>History</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="nav-btn" data-target="insights-section">
+                            <i class="ph ph-chart-pie-slice"></i>
+                            <span>Insights</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="nav-btn nav-btn-danger">
+                    <i class="ph ph-sign-out"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="nav-left">
+                    <button id="mobile-menu-btn" class="mobile-only">
+                        <i class="ph ph-list"></i>
+                    </button>
+                    <h3 id="current-section-title">Analyze Review</h3>
+                </div>
+                <div class="nav-right">
+                    <button id="theme-toggle" class="icon-btn" title="Toggle Dark Mode">
+                        <i class="ph ph-moon"></i>
+                    </button>
+                    <div class="user-profile">
+                        <span class="user-name">Jane Doe</span>
+                        <div class="avatar">
+                            <i class="ph ph-user"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-wrapper">
+                
+                <!-- Analyzer Section -->
+                <div id="analyzer-section" class="content-section active">
+                    <div class="grid-layout">
+                        <!-- Input Card -->
+                        <div class="card input-card">
+                            <div class="card-header">
+                                <h4>New Analysis</h4>
+                            </div>
+                            <div class="card-body">
+                                <textarea id="review-input" placeholder="Enter the customer review text here..." rows="8"></textarea>
+                                <button id="analyze-btn" class="btn btn-primary">
+                                    <i class="ph ph-sparkle"></i>
+                                    Analyze Sentiment
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Output Card -->
+                        <div class="card output-card" id="output-card">
+                            <div class="card-header">
+                                <h4>AI Output</h4>
+                            </div>
+                            <div class="card-body">
+                                <!-- Initial State -->
+                                <div class="empty-state" id="empty-state">
+                                    <i class="ph ph-robot"></i>
+                                    <p>Enter a review and click analyze to see results.</p>
+                                </div>
+                                
+                                <!-- Loading State -->
+                                <div class="loading-state hidden" id="loading-state">
+                                    <div class="spinner"></div>
+                                    <p>AI is analyzing the sentiment...</p>
+                                </div>
+                                
+                                <!-- Result State -->
+                                <div class="result-state hidden" id="result-state">
+                                    <div class="sentiment-header">
+                                        <div class="emoji-wrapper" id="result-emoji">😊</div>
+                                        <div class="sentiment-details">
+                                            <span class="sentiment-badge" id="result-badge">Positive</span>
+                                            <p class="confidence">Confidence Score: <strong id="result-confidence">0.95</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="sentiment-breakdown">
+                                        <h5>Key Topics Identified</h5>
+                                        <div class="topic-tags" id="result-topics">
+                                            <!-- Dynamically filled -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Section -->
+                <div id="history-section" class="content-section">
+                    <div class="card full-width">
+                        <div class="card-header">
+                            <h4>Recent Analyses</h4>
+                            <div class="header-actions">
+                                <div class="search-bar">
+                                    <i class="ph ph-magnifying-glass"></i>
+                                    <input type="text" placeholder="Search history...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body no-padding">
+                            <div class="table-responsive">
+                                <table class="history-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Review Snippet</th>
+                                            <th>Sentiment</th>
+                                            <th>Confidence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="history-table-body">
+                                        <!-- Dynamically populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insights Section -->
+                <div id="insights-section" class="content-section">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon positive"><i class="ph ph-smiley"></i></div>
+                            <div class="metric-info">
+                                <span>Positive Reviews</span>
+                                <h3>1,248</h3>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon neutral"><i class="ph ph-smiley-meh"></i></div>
+                            <div class="metric-info">
+                                <span>Neutral Reviews</span>
+                                <h3>384</h3>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon negative"><i class="ph ph-smiley-sad"></i></div>
+                            <div class="metric-info">
+                                <span>Negative Reviews</span>
+                                <h3>156</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Sentiment Distribution</h4>
+                            </div>
+                            <div class="card-body chart-container">
+                                <canvas id="sentimentPieChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Top Keywords</h4>
+                            </div>
+                            <div class="card-body chart-container">
+                                <canvas id="keywordBarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
